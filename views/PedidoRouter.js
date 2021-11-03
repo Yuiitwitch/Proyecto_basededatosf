@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //Importo modelo de datos
-const CategoryController = require('../controllers/CategoryController');
+const CategoryController = require('../controllers/PedidoController');
 
 // End-points CRUD movies
 router.get('/', CategoryController.getAll);

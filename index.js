@@ -17,13 +17,13 @@ var corsOptions = {
     optionsSuccessStatus: 204
   };
 
-//Middleware
+//Middleware //Funciones que se ejecutaran primero
 app.use(morgan('combined', { stream: logger.stream }));
 app.use(express.json());
 app.use(cors(corsOptions)); //Add CORS Middleware
 
 //Rutas
-app.get('/', (req, res) => {res.send('Bienvenidos a Express');});
+app.get('/', (req, res) => {res.send('Bienvenidos a Express');}); //Pantalla de bienvenida
 app.use(router);
 
 //Connecting to the database

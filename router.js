@@ -4,13 +4,13 @@ const router = require('express').Router();
 const auth = require('./middlewares/auth');
 
 //Importamos Routes definidas en views
-const MovieRouter = require('./views/MovieRouter');
-const CategoryRouter = require('./views/CategoryRouter');
-const UserRouter = require('./views/UserRouter');
+const PeliculaRouter = require('./views/PeliculaRouter');
+const PedidoRouter = require('./views/PedidoRouter');
+const UsuarioRouter = require('./views/UsuarioRouter');
 
 //Rutas
-router.use('/api', UserRouter); //Login and register routes
-router.use('/movies',auth, MovieRouter); //add auth
-router.use('/categories',auth, CategoryRouter);
+router.use('/usuarios', UsuarioRouter); //Login and register routes
+router.use('/peliculas', PeliculaRouter); //add auth
+router.use('/pedidos', PedidoRouter);
 
 module.exports = router;
