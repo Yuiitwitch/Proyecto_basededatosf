@@ -18,7 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     peliculaId: DataTypes.INTEGER,
     usuarioId: DataTypes.INTEGER,
     fecha_alquiler: DataTypes.DATE,
-    fecha_devolucion: DataTypes.DATE
+    fecha_devolucion: DataTypes.DATE,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'pedido',

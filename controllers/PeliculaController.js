@@ -7,7 +7,7 @@ const PeliculaController = {}; //Create the object controller
 
 
 //CRUD end-points Functions
-//-------------------------------------------------------------------------------------
+
 //GET all Peliculas from database
 PeliculaController.getAll = (req, res) => {
     
@@ -61,6 +61,7 @@ PeliculaController.getById = (req, res) => {
         });
       });
   };
+  
   PeliculaController.getByCity = (req, res) => {
 
     let ciudad = req.params.ciudad;
@@ -109,7 +110,7 @@ PeliculaController.create = (req, res) => {
     };
   
     // Guarda Peliculas en la base de datos
-    Peliculas.create(newPelicula)
+    peliculas.create(newPelicula)
       .then(data => {
         res.send(data);
       })
