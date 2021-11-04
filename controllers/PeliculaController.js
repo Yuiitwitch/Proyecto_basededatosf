@@ -95,7 +95,7 @@ PeliculaController.getById = (req, res) => {
 //CREATE a new Pelicula in database
 PeliculaController.create = (req, res) => {
     // Validate request
-    if (!req.body.title) {
+    if (!req.body.titulo) {
       res.status(400).send({
         message: "Content can not be empty!"
       });

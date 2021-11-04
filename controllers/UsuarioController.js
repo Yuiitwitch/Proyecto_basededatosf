@@ -7,74 +7,63 @@ const UsuarioController = {};
 
 
 //GESTIONAMOS LOGIN DE USUARIOS
-UsuarioController.signIn = (req, res) => {
+UsuarioController.signIn = (req, res) =>{
+  // let { correo, clave } = req.body;
+  // Buscar usuario
+  user.findOne({ where: { correo: correo }
+  }).then(user => {
+      if (!user) {
+          res.status(404).json({ msg: "Usuario con este correo no encontrado" });
+      } else {
+          if (bcrypt.compareSync(clave, user.clave)) {
+              // Creamos el token
+              let token = jwt.sign({ user: user }, authConfig.secret, {
+                  expiresIn: authConfig.expires
+              });
 
-    let correo = req.body.correo;
-    let clave = req.body.clave;
-
-    usuario.findOne({
-        where: { correo: correo }
-    }).then(usuario => {
-        if (!usuario) {
-            res.status(404).json({ msg: "Usuario con este correo no encontrado" });
-        } else {
-            if (bcrypt.compareSync(clave, usuario.clave)) { //COMPARA CONTRASEÑA INTRODUCIDA CON CONTRASEÑA GUARDADA, TRAS DESENCRIPTAR
-                let token = jwt.sign({ usuario: usuario }, authConfig.secret, {
-                    expiresIn: authConfig.expires
-                });
-                res.json({
-                    usuario: usuario,
-                    token: token
-                })
-            } else {
-                res.status(401).json({ msg: "Contraseña incorrecta" })
-            }
-        }
-    }).catch(err => {
-        res.status(500).json(err);
-    })
+              res.json({
+                  user: user,
+                  token: token
+              })
+          } else {
+              // Unauthorized Access
+              res.status(401).json({ msg: "Contraseña incorrecta" })
+          }
+      }
+  }).catch(err => {
+      res.status(500).json(err);
+  })
 };
 
 //-------------------------------------------------------------------------------------
 
 //GESTIONAMOS REGISTRO DE USUARIOS
-UsuarioController.signUp = (req, res) => { 
+UsuarioController.signUp = (req, res)=> {
 
-    if (req.user.usuario.rol == "administrador") {//COMPROBAMOS SI ESTÁ LOGADO COMO ADMINISTRADOR
+        // Encriptamos la contraseña
+        let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
 
-          let clave = req.body.clave;
+        // Crear un usuario
+        user.create({
+            nombre: req.body.nombre,
+            correo: req.body.correo
+        }).then(user => {
 
-          if (clave.length >= 8) {//SE ENCRIPTA LA CONTRASEÑA SI MÍNIMO TIENE 8 CARACTERES
-            var password = bcrypt.hashSync(req.body.clave, Number.parseInt(authConfig.rounds));   
-
-            usuario.create({
-                nombre: req.body.nombre,
-                correo: req.body.correo
-            }).then(usuario => {
-                let token = jwt.sign({ usuario: usuario }, authConfig.secret, {
-                    expiresIn: authConfig.expires
-                });
-                res.json({
-                    usuario: usuario,
-                    token: token
-                });
-            }).catch(err => {
-                res.status(500).json(err);
+            // Creamos el token
+            let token = jwt.sign({ user: user }, authConfig.secret, {
+                expiresIn: authConfig.expires
             });
-          }else{
-            res.send({
-              message: `La contraseña tiene que tener un mínimo de 8 caracteres. ${clave}`
-          });
-          }
-    }else{
-      res.send({
-        message: `No tienes permisos para registrar usuarios. Contacta con un administrador.`
-      });
-    }
 
-    
+            res.json({
+                user: user,
+                token: token
+            });
 
-};
+        }).catch(err => {
+            res.status(500).json(err);
+        });
+
+    };
 
 //-------------------------------------------------------------------------------------
 
@@ -83,26 +72,18 @@ UsuarioController.signUp = (req, res) => {
 
 
 UsuarioController.getAll = (req, res) => {
-  
-    if (req.user.usuario.rol == "administrador") {//COMPROBAMOS SI ESTÁ LOGADO COMO ADMINISTRADOR
 
-            usuario.findAll()
-              .then(data => {
-                res.send(data);
-              })
-              .catch(err => {
-                res.status(500).send({
-                  message:
-                    err.message || "Ha surgido algún error al intentar acceder a los usuarios."
-                });
-              });
-    }else{
-      res.send({
-        message: `No tienes permisos para visualizar a todos los usuarios. Contacta con un administrador.`
+  usuarios.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving categories."
       });
-    }
-  };
-
+    });
+};
 
 
 //buscamos usuario por id
@@ -130,38 +111,29 @@ UsuarioController.getById = (req, res) => {
 //-------------------------------------------------------------------------------------
 
 UsuarioController.update = (req, res) => {
+  const id = req.params.id;
 
-        const id = req.params.id;
-
-        if (req.user.usuario.rol == "administrador" || req.user.usuario.id == id) {// HACEMOS QUE SOLO PUEDA ACTULIZARLO EL ADMINISTRADOR O EL USUARIO DUEÑO DEL PERFIL
-
-              
-            
-              usuario.update(req.body, {
-                where: { id: id }
-              })
-                .then(num => {
-                  if (num == 1) {
-                    res.send({
-                      message: "El usuario ha sido actualizado correctamente."
-                    });
-                  } else {
-                    res.send({
-                      message: `No se ha podido actualizar el usuario con el id ${id}`
-                    });
-                  }
-                })
-                .catch(err => {
-                  res.status(500).send({
-                    message: "Ha surgido algún error al intentar actualizar el usuario con el id " + id + "."
-                  });
-                });
-        }else{
-          res.send({
-            message: `No tienes permisos para modificar el perfil indicado.`
-          });
-        }
+  usuarios.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Usuario was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Usuario with id=${id}. Maybe Usuario was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Usuario with id=" + id
+      });
+    });
 };
+
 
 //borrar todos los usuarios por id
 UsuarioController.delete = (req, res) => {
@@ -177,7 +149,7 @@ UsuarioController.delete = (req, res) => {
           });
         } else {
           res.send({
-            message: `Cannot delete usuario with id=${id}. Maybe Movie was not found!`
+            message: `Cannot delete usuario with id=${id}. Maybe Usuario was not found!`
           });
         }
       })
