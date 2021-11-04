@@ -11,6 +11,8 @@ router.get('/:id', PeliculaController.getById);
 router.get('/titulo/:titulo', PeliculaController.getByTitulo);
 router.get('/ciudad/:ciudad', PeliculaController.getByCity);
 router.get('/genero/:genero', PeliculaController.getByGenre);
+router.get('/ciudad/:ciudad', PeliculaController.getByCity);
+router.get('/actor/:actor', PeliculaController.getByActr)
 router.post('/',auth, PeliculaController.create);
 router.put('/:id',auth, PeliculaController.update);
 router.delete('/',auth, PeliculaController.deleteAll);

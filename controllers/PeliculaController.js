@@ -77,6 +77,21 @@ PeliculaController.getById = (req, res) => {
         });
       });
   };
+  PeliculaController.getByActr = (req, res) => {
+
+    let actor = req.params.actor;
+    
+    peliculas.findAll( {where: {actor: actor}})
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Ha surgido algún error al intentar acceder a las películas."
+        });
+      });
+  };
   PeliculaController.getByGenre = (req, res) => {
 
     let generos = req.params.genero;

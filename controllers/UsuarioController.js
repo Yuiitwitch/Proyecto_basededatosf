@@ -8,21 +8,22 @@ const UsuarioController = {};
 
 //GESTIONAMOS LOGIN DE USUARIOS
 UsuarioController.signIn = (req, res) =>{
-  // let { correo, clave } = req.body;
+  let { correo, contraseña } = req.body;
   // Buscar usuario
-  user.findOne({ where: { correo: correo }
+  usuario.findOne({ where: { correo: correo }
   }).then(user => {
       if (!user) {
           res.status(404).json({ msg: "Usuario con este correo no encontrado" });
       } else {
-          if (bcrypt.compareSync(clave, user.clave)) {
+        console.log(correo);
+          if (bcrypt.compareSync(contraseña, user.contraseña)) {
               // Creamos el token
-              let token = jwt.sign({ user: user }, authConfig.secret, {
+              let token = jwt.sign({ usuario: user }, authConfig.secret, {
                   expiresIn: authConfig.expires
               });
 
               res.json({
-                  user: user,
+                  usuario: user,
                   token: token
               })
           } else {
@@ -40,22 +41,23 @@ UsuarioController.signIn = (req, res) =>{
 //GESTIONAMOS REGISTRO DE USUARIOS
 UsuarioController.signUp = (req, res)=> {
 
-        // Encriptamos la contraseña
-        let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+        // // Encriptamos la contraseña
+        let password = bcrypt.hashSync(req.body.contraseña, Number.parseInt(authConfig.rounds));
 
         // Crear un usuario
-        user.create({
+        usuario.create({
             nombre: req.body.nombre,
-            correo: req.body.correo
+            correo: req.body.correo,
+            contraseña: password
         }).then(user => {
 
             // Creamos el token
-            let token = jwt.sign({ user: user }, authConfig.secret, {
+            let token = jwt.sign({ usuario: user }, authConfig.secret, {
                 expiresIn: authConfig.expires
             });
 
             res.json({
-                user: user,
+                usuario: user,
                 token: token
             });
 
