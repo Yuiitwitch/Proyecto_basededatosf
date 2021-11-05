@@ -1,4 +1,5 @@
 PROYECTO BASE DE DATOS
+
 Proyecto realizado en el BootCamp FullStack Developer , en la que realizamos una base de datos para un videoclub a distancia. En el que incluimos varias tablas como (Usuarios,pedidos,peliculas)
 
 Usaremos el modelo vista-controlador para estructurar el proyecto. En la que incluiremos un crud.
@@ -95,3 +96,6 @@ sequelize db:seed:undo:all
 #USO DE LA API
 
 POSTMAN
+
+![image](https://user-images.githubusercontent.com/86298325/140483043-21949e86-7a0d-4d10-a6ca-b0cb53278ddd.png)
+
