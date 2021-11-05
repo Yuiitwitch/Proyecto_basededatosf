@@ -1,60 +1,97 @@
-# Express API Sequelize + Mysql + jwt
+PROYECTO BASE DE DATOS
+Proyecto realizado en el BootCamp FullStack Developer , en la que realizamos una base de datos para un videoclub a distancia. En el que incluimos varias tablas como (Usuarios,pedidos,peliculas)
 
-## COMANDOS BÁSICOS
-<br>
+Usaremos el modelo vista-controlador para estructurar el proyecto. En la que incluiremos un crud.
 
-![image](https://user-images.githubusercontent.com/16636086/138780246-dc69ba86-c111-42e6-8079-35ffeba723f9.png)
+REQUISITOS DEL TRABAJO
+● Tecnologias :
 
+ES6
+NodeJs
+Express
+API
+Git
+Postman
+EMPOINTS REQUERIDOS
+#USUARIOS
 
-```
+● Endpoint de Alta de usuario
+
+● Endpoint de Perfil
+
+● Endpoint de Baja de usuario
+
+● Endpoint de Login de usuario
+
+#PELICULAS
+
+● Endpoint busqueda nombre
+
+● Endpoint busqueda por id
+
+● Endpoint busqueda todas las pelicuals
+
+● Endpoint filtrar por género
+
+● Endpoint filtrar por actores
+
+#PEDIDOS
+
+● Endpoint crear un pedido
+
+##GESTION DE DATOS
+
+● SEQUELIZE
+
+#TECNOLOGIAS UTILIZADAS.
+
+● EXPRESS
+
+● NODEMON : Nos ayudara a que el servidor este levantado a cada cambio que hagamos.
+
+● COLORS : Dara formato a nuestro proyecto
+
+● MORGAN : para que nos muestre los mensajes por terminal al realizar peticiones al servidor
+
+● WINSTON : creara la posibilidad de generar logs y guardarlos en el archivo logs
+
+● CORS : nos ayudara con el control de acceso a nuestra API
+
+● JSONWEBTOKEN : para el uso de gestion de tokens
+
+● BCRYPT : nos ayudara a encriptar las contraseñas
+
+COMANDOS BÁSICOS UTILIZADOS
 npm init
+
 npm install
+
 npm update
+
 npm run dev
+
 npm run start
 
 npm install cors jsonwebtoken bcrypt
+
 sequelize model:generate --name user --attributes name:string, password:string, email:string
-sequelize db:create
-sequelize db:migrate
+
+sequelize db:create (creacion de base de datos)
+
+sequelize db:migrate (creacion de tablas)
 
 sequelize db:migrate:undo
+
 sequelize db:migrate:undo:all
 
 sequelize seed:generate --name demo-user
-sequelize db:seed:all
+
+sequelize db:seed:all ( creación de los registros)
+
 sequelize db:seed:undo
+
 sequelize db:seed:undo:all
-```
 
-## END-POINTS
+#USO DE LA API
 
-```
-
-#### Register
-POST - localhost:3000/api/signup - { "name": "root", "email": "root@email.com",  "password": "password" }
-
-#### Login
-POST - localhost:3000/api/signin - { "email": "root@email.com",  "password": "password" }
-
-#### Home
-GET - localhost:3000
-
-#### Movies
-GET - localhost:3000/movies
-GET - localhost:3000/movies/:id
-GET - localhost:3000/movies/name/:title
-POST - localhost:3000/movies
-PUT - localhost:3000/movies:id
-DELETE - localhost:3000/movies
-DELETE - localhost:3000/movies:id
-
-#### Categories
-GET - localhost:3000/categories
-GET - localhost:3000/categories/:id
-GET - localhost:3000/categories/name/:title
-POST - localhost:3000/categories
-PUT - localhost:3000/categories:id
-DELETE - localhost:3000/categories
-DELETE - localhost:3000/categories:id
-```
+POSTMAN
