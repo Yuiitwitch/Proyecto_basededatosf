@@ -51,14 +51,14 @@ UsuarioController.signUp = (req, res)=> {
             contraseña: password
         }).then(user => {
 
-            // Creamos el token
-            let token = jwt.sign({ usuario: user }, authConfig.secret, {
-                expiresIn: authConfig.expires
-            });
+            // // Creamos el token
+            // let token = jwt.sign({ usuario: user }, authConfig.secret, {
+            //     expiresIn: authConfig.expires
+            // });
 
             res.json({
                 usuario: user,
-                token: token
+                // token: token
             });
 
         }).catch(err => {
