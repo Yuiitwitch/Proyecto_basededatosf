@@ -8,7 +8,7 @@ const UsuarioController = require('../controllers/UsuarioController');
 
 // Dos rutas: login y registro
 // /api/singin & /api/singup
-router.post('/login',auth, UsuarioController.signIn);
+router.post('/login', UsuarioController.signIn);
 router.post('/registro', UsuarioController.signUp);
 router.get('/' ,auth, UsuarioController.getAll);
 router.get('/:id', UsuarioController.getById);
