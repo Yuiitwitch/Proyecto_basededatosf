@@ -12,10 +12,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      apellidos: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       correo: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
+      },
+      direccion: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      poblacion: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       contraseña: {
         type: Sequelize.STRING,
