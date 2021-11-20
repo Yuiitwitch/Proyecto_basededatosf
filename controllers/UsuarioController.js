@@ -7,65 +7,66 @@ const UsuarioController = {};
 
 
 //GESTIONAMOS LOGIN DE USUARIOS
-UsuarioController.signIn = (req, res) =>{
+UsuarioController.signIn = (req, res) => {
   let { correo, contraseña } = req.body;
   // Buscar usuario
-  usuario.findOne({ where: { correo: correo }
+  usuario.findOne({
+    where: { correo: correo }
   }).then(user => {
-      if (!user) {
-          res.status(404).json({ msg: "Usuario con este correo no encontrado" });
-      } else {
-        console.log(correo);
-          if (bcrypt.compareSync(contraseña, user.contraseña)) {
-              // Creamos el token
-              let token = jwt.sign({ usuario: user }, authConfig.secret, {
-                  expiresIn: authConfig.expires
-              });
+    if (!user) {
+      res.status(404).json({ msg: "Usuario con este correo no encontrado" });
+    } else {
+      console.log(correo);
+      if (bcrypt.compareSync(contraseña, user.contraseña)) {
+        // Creamos el token
+        let token = jwt.sign({ usuario: user }, authConfig.secret, {
+          expiresIn: authConfig.expires
+        });
 
-              res.json({
-                  usuario: user,
-                  token: token
-              })
-          } else {
-              // Unauthorized Access
-              res.status(401).json({ msg: "Contraseña incorrecta" })
-          }
+        res.json({
+          usuario: user,
+          token: token
+        })
+      } else {
+        // Unauthorized Access
+        res.status(401).json({ msg: "Contraseña incorrecta" })
       }
+    }
   }).catch(err => {
-      res.status(500).json(err);
+    res.status(500).json(err);
   })
 };
 
 //-------------------------------------------------------------------------------------
 
 //GESTIONAMOS REGISTRO DE USUARIOS
-UsuarioController.signUp = (req, res)=> {
+UsuarioController.signUp = (req, res) => {
 
-        // // Encriptamos la contraseña
-        let password = bcrypt.hashSync(req.body.contraseña, Number.parseInt(authConfig.rounds));
+  // // Encriptamos la contraseña
+  let password = bcrypt.hashSync(req.body.contraseña, Number.parseInt(authConfig.rounds));
 
-        // Crear un usuario
-        usuario.create({
-            nombre: req.body.nombre,
-            correo: req.body.correo,
-            contraseña: password
-        }).then(user => {
+  // Crear un usuario
+  usuario.create({
+    nombre: req.body.nombre,
+    correo: req.body.correo,
+    contraseña: password
+  }).then(user => {
 
-            // // Creamos el token
-            // let token = jwt.sign({ usuario: user }, authConfig.secret, {
-            //     expiresIn: authConfig.expires
-            // });
+    // // Creamos el token
+    // let token = jwt.sign({ usuario: user }, authConfig.secret, {
+    //     expiresIn: authConfig.expires
+    // });
 
-            res.json({
-                usuario: user,
-                // token: token
-            });
+    res.json({
+      usuario: user,
+      // token: token
+    });
 
-        }).catch(err => {
-            res.status(500).json(err);
-        });
+  }).catch(err => {
+    res.status(500).json(err);
+  });
 
-    };
+};
 
 //-------------------------------------------------------------------------------------
 
@@ -75,23 +76,32 @@ UsuarioController.signUp = (req, res)=> {
 
 UsuarioController.getAll = (req, res) => {
 
-  usuarios.findAll()
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving categories."
+  if (req.user.usuario.rol == "administrador") {
+
+    usuarios.findAll()
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving categories."
+        });
       });
+  } else {
+    res.send({
+      message: `permisos insuficiente, contacto con un adminsitrador`
     });
+  }
 };
 
 
 //buscamos usuario por id
 UsuarioController.getById = (req, res) => {
-    const id = req.params.id;
-  
+  const id = req.params.id;
+
+  if (req.user.usuario.rol == "administrador" || req.user.usuario.id == id) {
+
     usuario.findByPk(id)
       .then(data => {
         if (data) {
@@ -107,40 +117,53 @@ UsuarioController.getById = (req, res) => {
           message: "Error retrieving categories with id=" + id
         });
       });
-  };
-  
+  } else {
+    res.send({
+      message: `permisos insuficientes, contacte con un administrador`
+    })
+  }
+};
+
 
 //-------------------------------------------------------------------------------------
 
 UsuarioController.update = (req, res) => {
   const id = req.params.id;
 
-  usuarios.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Usuario was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Usuario with id=${id}. Maybe Usuario was not found or req.body is empty!`
-        });
-      }
+  if (req.user.usuario.rol == "administrador" || req.user.usuario.id == id) {
+
+    usuarios.update(req.body, {
+      where: { id: id }
     })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Usuario with id=" + id
+      .then(num => {
+        if (num == 1) {
+          res.send({
+            message: "Usuario was updated successfully."
+          });
+        } else {
+          res.send({
+            message: `Cannot update Usuario with id=${id}. Maybe Usuario was not found or req.body is empty!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error updating Usuario with id=" + id
+        });
       });
+  } else {
+    res.send({
+      message: `permisos infucientes, contacte con un administrador`
     });
+  }
 };
 
 
 //borrar todos los usuarios por id
 UsuarioController.delete = (req, res) => {
-    const id = req.params.id;
-  
+  const id = req.params.id;
+
+  if (req.user.usuario.rol == "administrador" || req.user.usuario.id == id) {
     usuario.destroy({
       where: { id: id }
     })
@@ -160,9 +183,16 @@ UsuarioController.delete = (req, res) => {
           message: "Could not delete usuario with id=" + id
         });
       });
-  };
+  } else {
+    res.send({
+      message: `permisos insuficientes, contacte con un administrador`
+    });
+  }
+};
 //borrar todos los usuarios
 UsuarioController.deleteAll = (req, res) => {
+
+  if (req.user.usuario.rol == "administrador" || req.user.usuario.id == id) {
     usuarios.destroy({
       where: {},
       truncate: false
@@ -176,6 +206,11 @@ UsuarioController.deleteAll = (req, res) => {
             err.message || "Some error occurred while removing all categories."
         });
       });
+    }else{
+      res.send({
+        message: `permisos insuficientes, contacte con un administrador`
+      })
+    }
   };
 
-module.exports = UsuarioController;
+  module.exports = UsuarioController;
