@@ -2,6 +2,7 @@ const { usuario } = require('../models/index');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth');
+const { red } = require('colors');
 
 const UsuarioController = {};
 
@@ -49,7 +50,8 @@ UsuarioController.signUp = (req, res) => {
   usuario.create({
     nombre: req.body.nombre,
     correo: req.body.correo,
-    contraseña: password
+    contraseña: password,
+    rol: "usuario"
   }).then(user => {
 
     // // Creamos el token
