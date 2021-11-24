@@ -7,7 +7,7 @@ const PedidoController = require('../controllers/PedidoController');
 // End-points CRUD movies
 router.get('/', PedidoController.getAll);
 router.get('/:id', PedidoController.getById);
-router.get('/type/:type', PedidoController.getByType);
+router.get('/userid/:userid', PedidoController.getByUserId);
 router.post('/', PedidoController.create);
 router.put('/:id', PedidoController.update);
 router.delete('/', PedidoController.deleteAll);

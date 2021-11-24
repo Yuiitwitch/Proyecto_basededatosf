@@ -110,10 +110,10 @@ PedidoController.update = (req, res) => {
 
 
 //-------------------------------------------------------------------------------------
-//GET categories by Type from database  
-//FindByType
-PedidoController.getByType = (req, res) => {
-  pedidos.findAll({ where: { type: req.params.id } })
+//GET orders by user id 
+//FindByUserId
+PedidoController.getByUserId = (req, res) => {
+  pedidos.findAll({ where: { usuarioId : req.params.usuarioId } })
     .then(data => {
       res.send(data);
     })
