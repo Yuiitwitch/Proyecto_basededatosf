@@ -1,6 +1,9 @@
 //Importo modelo de datos
 const db = require("../models");
 const pedidos = db.pedido;
+const usuarios = db.usuario;
+const peliculas = db.pelicula;
+
 const Op = db.Sequelize.Op; //Import all ORM sequelize functions 
 
 const PedidoController = {}; //Create the object controller
@@ -113,17 +116,20 @@ PedidoController.update = (req, res) => {
 //GET orders by user id 
 //FindByUserId
 PedidoController.getByUserId = (req, res) => {
-  pedidos.findAll({ where: { usuarioId : req.params.usuarioId } })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving categories."
+  const id = req.params.usuarioId;
+  
+    pedidos.findAll({ where: { usuarioId: id }, include: [{ model: peliculas }, { model: usuarios }] })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving order."
+        });
       });
-    });
 };
+
 
 
 //-------------------------------------------------------------------------------------
