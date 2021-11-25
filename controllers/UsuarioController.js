@@ -49,7 +49,10 @@ UsuarioController.signUp = (req, res) => {
   // Crear un usuario
   usuario.create({
     nombre: req.body.nombre,
+    apellidos: req.body.apellidos,
     correo: req.body.correo,
+    direccion: req.body.direccion,
+    poblacion:req.body.poblacion,
     contraseña: password,
     rol: "usuario"
   }).then(user => {
