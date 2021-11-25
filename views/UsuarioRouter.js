@@ -10,7 +10,7 @@ const UsuarioController = require('../controllers/UsuarioController');
 // /api/singin & /api/singup
 router.post('/login', UsuarioController.signIn);
 router.post('/registro', UsuarioController.signUp);
-router.get('/' ,auth, UsuarioController.getAll);
+router.get('/', UsuarioController.getAll);
 router.get('/:id', UsuarioController.getById);
 router.put(':id',auth, UsuarioController.update);
 router.delete('/', auth, UsuarioController.deleteAll);
