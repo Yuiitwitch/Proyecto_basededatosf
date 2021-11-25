@@ -81,7 +81,6 @@ UsuarioController.signUp = (req, res) => {
 
 UsuarioController.getAll = (req, res) => {
 
-  if (req.user.usuario.rol == "administrador") {
 
     usuario.findAll()
       .then(data => {
@@ -93,11 +92,7 @@ UsuarioController.getAll = (req, res) => {
             err.message || "Some error occurred while retrieving categories."
         });
       });
-  } else {
-    res.send({
-      message: `permisos insuficiente, contacto con un adminsitrador`
-    });
-  }
+  
 };
 
 
