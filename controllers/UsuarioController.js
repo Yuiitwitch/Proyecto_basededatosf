@@ -83,7 +83,7 @@ UsuarioController.getAll = (req, res) => {
 
   if (req.user.usuario.rol == "administrador") {
 
-    usuarios.findAll()
+    usuario.findAll()
       .then(data => {
         res.send(data);
       })
