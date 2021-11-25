@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    población: {
+    poblacion: {
       type: DataTypes.STRING,
       allowNull: false
     },
